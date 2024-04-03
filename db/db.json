@@ -1,0 +1,56 @@
+{
+  "items": [
+    {
+      "id": "1",
+      "description": "oil",
+      "calories": 20,
+      "protein": 10,
+      "fat": 3,
+      "carbs": 10
+    },
+    {
+      "id": "2",
+      "description": "chips",
+      "calories": 100,
+      "protein": 23,
+      "fat": 30,
+      "carbs": 15
+    },
+    {
+      "id": "3",
+      "description": "cheese",
+      "calories": 5,
+      "protein": 0,
+      "fat": 8,
+      "carbs": 20
+    },
+    {
+      "id": "28",
+      "description": "asd",
+      "protein": "33",
+      "fat": "33",
+      "calories": "123"
+    },
+    {
+      "id": 57,
+      "description": "ppp",
+      "protein": "8",
+      "fat": "8",
+      "calories": "1"
+    },
+    {
+      "id": 80,
+      "description": "az",
+      "protein": "12",
+      "fat": "21",
+      "calories": "12"
+    },
+    {
+      "id": 99,
+      "description": "rrr",
+      "protein": "3",
+      "fat": "3",
+      "calories": "3"
+    }
+  ]
+}

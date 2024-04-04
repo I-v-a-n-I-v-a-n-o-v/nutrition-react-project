@@ -5,22 +5,31 @@ import { TableHead, TableList, TableRow, SearchBar } from "./styles/ComponentSty
 export const TableFood = () => {
     let context = useContext(FoodItemsContext);
     let [items, setItems] = useState(context);
+    let [selectedItems, setSelectedItems] = useState([]);
     let [searchItem, setSearchItem] = useState('');
-    let [totalCalories, setTotalCalories] = useState(0);
-    let [totalProtein, setTotalProtein] = useState(0);
-    let [totalFat, setTotalFat] = useState(0);
-    let [totalCarbs, setTotalCarbs] = useState(0);
+
+    const handleRowClick = (item) => {
+        setSelectedItems(prev => {
+            if (prev.find(p => p.id === item.id)) {
+                return prev;
+            }
+            return [...prev, item];
+        });
+    };
+
+    const calculateTotals = (items) => items.reduce((totals, item) => ({
+        calories: totals.calories + Number(item.calories),
+        protein: totals.protein + Number(item.protein),
+        fat: totals.fat + Number(item.fat),
+        carbs: totals.carbs + Number(item.carbs),
+    }), { calories: 0, protein: 0, fat: 0, carbs: 0 });
+
+    const totalSelected = calculateTotals(selectedItems);
 
     useEffect(() => {
-        setItems(items.filter(item => item.description.toLowerCase().startsWith(searchItem)));
-        if (searchItem === '') {
-            setItems([...context]);
-        }
-        setTotalCalories(items.reduce((prev, cur) => prev + +(cur.calories), 0));
-        setTotalProtein(items.reduce((prev, cur) => prev + +(cur.protein), 0));
-        setTotalFat(items.reduce((prev, cur) => prev + +(cur.fat), 0));
-        setTotalCarbs(items.reduce((prev, cur) => prev + +(cur.carbs), 0));
-    }, [searchItem, items, context]);
+        let filteredItems = context.filter(item => item.description.toLowerCase().startsWith(searchItem.toLowerCase()));
+        setItems(filteredItems);
+    }, [searchItem, context]);
 
     return (
         <>
@@ -28,7 +37,7 @@ export const TableFood = () => {
             <TableList>
                 <thead>
                     <tr>
-                        <TableHead>Descritpion</TableHead>
+                        <TableHead>Description</TableHead>
                         <TableHead>Kcal</TableHead>
                         <TableHead>Protein</TableHead>
                         <TableHead>Fat</TableHead>
@@ -36,28 +45,51 @@ export const TableFood = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {items.map((item) => {
-                        return (
-                            <tr key={item.id}>
-                                <TableRow>{item.description}</TableRow>
-                                <TableRow>{item.calories}</TableRow>
-                                <TableRow>{item.protein}</TableRow>
-                                <TableRow>{item.fat}</TableRow>
-                                <TableRow>{item.carbs}</TableRow>
-                            </tr>
-                        );
-                    })}
+                    {items.map((item) => (
+                        <tr key={item.id} onClick={() => handleRowClick(item)}>
+                            <TableRow>{item.description}</TableRow>
+                            <TableRow>{item.calories}</TableRow>
+                            <TableRow>{item.protein}</TableRow>
+                            <TableRow>{item.fat}</TableRow>
+                            <TableRow>{item.carbs}</TableRow>
+                        </tr>
+                    ))}
                 </tbody>
+            </TableList>
+
+            {/* Selected Foods Table */}
+            <TableList >
+                <thead>
+                    <tr>
+                        <TableHead>Selected Foods</TableHead>
+                        <TableHead>Kcal</TableHead>
+                        <TableHead>Protein</TableHead>
+                        <TableHead>Fat</TableHead>
+                        <TableHead>Carbs</TableHead>
+                    </tr>
+                </thead>
+                <tbody>
+                    {selectedItems.map((item) => (
+                        <tr key={item.id}>
+                            <TableRow>{item.description}</TableRow>
+                            <TableRow>{item.calories}</TableRow>
+                            <TableRow>{item.protein}</TableRow>
+                            <TableRow>{item.fat}</TableRow>
+                            <TableRow>{item.carbs}</TableRow>
+                        </tr>
+                    ))}
+                </tbody>
+                {/* Totals for the selected foods */}
                 <tfoot>
                     <tr>
                         <TableRow>Total</TableRow>
-                        <TableRow>{totalCalories}</TableRow>
-                        <TableRow>{totalProtein}</TableRow>
-                        <TableRow>{totalFat}</TableRow>
-                        <TableRow>{totalCarbs}</TableRow>
+                        <TableRow>{totalSelected.calories}</TableRow>
+                        <TableRow>{totalSelected.protein}</TableRow>
+                        <TableRow>{totalSelected.fat}</TableRow>
+                        <TableRow>{totalSelected.carbs}</TableRow>
                     </tr>
                 </tfoot>
             </TableList>
         </>
-    )
+    );
 };

@@ -35,6 +35,7 @@ export const InputForm = styled.input`
 `;
 
 export const TableList = styled.table`
+  margin-bottom: 5rem;
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
   width: 100%;
